@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course Content</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            z-index: 1000;
+            margin-top: -3px;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        nav::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        header {
+            margin-top: 80px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            color: #e94560;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .course-container {
+            margin: 20px auto;
+            width: 800px;
+            min-height: 250px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-details {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .course-details label {
+            color: #00d9ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .course-details input {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+        }
+
+        .lessons-container {
+            width: 100%;
+        }
+
+        .lesson-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .lesson-number {
+            font-weight: bold;
+            color: #e94560;
+            font-size: 1.2rem;
+        }
+
+        .lesson-content {
+            margin-bottom: 15px;
+        }
+
+        .lesson-content label {
+            color: #00d9ff;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .lesson-content input[type="text"], .lesson-content textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .lesson-content textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .sub-lessons {
+            margin-left: 20px;
+            margin-top: 15px;
+            border-left: 2px solid rgba(0, 217, 255, 0.3);
+            padding-left: 15px;
+        }
+
+        .sub-lesson-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .sub-lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sub-lesson-title {
+            font-weight: bold;
+            color: #00d9ff;
+            font-size: 1rem;
+        }
+
+        .remove-btn {
+            background-color: #e94560;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .remove-btn:hover {
+            background-color: #d83755;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .add-sub-btn, .add-lesson-btn, .done-btn {
+            padding: 8px 15px;
+            background-color: #e94560;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-family: 'Raleway', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-sub-btn, .add-lesson-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .add-sub-btn:hover, .add-lesson-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .done-btn {
+            background-color: #e94560;
+        }
+
+        .done-btn:hover {
+            background-color: #d83755;
+            transform: scale(1.05);
+        }
+
+        .add-sub-btn:disabled, .add-lesson-btn:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .main-button-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .bottom-text {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.1rem;
+        }
+
+        .bottom-text p {
+            color: #fff;
+            margin: 0;
+            display: inline;
+        }
+
+        .bottom-text a {
+            color: #00d9ff;
+            text-decoration: none;
+            margin-left: 8px;
+            transition: color 0.3s;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile dropdown styles */
+        .profile-container {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .profile-btn {
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: left;
+            z-index: 1002;
+        }
+
+        .profile-menu p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-menu a {
+            color: #e94560;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="confirmLogout()">Home</a>
+            <a id="logoutLink" href="../index.html" style="display: none;"></a>
+            <a href="./teacher dashboard.html">Dashboard</a>
+            <a href="./manage.html">Manage Courses</a>
+        </nav>
+        
+        <!-- Profile Dropdown -->
+        <div class="profile-container">
+            <div class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+                <p>username: <span id="displayUsername">teacher123</span></p>
+                <a href="#" onclick="logout(event)">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <h1>Create Course Content</h1>
+
+    <div class="course-container">
+        <div class="course-details">
+            <div>
+                <label for="course-title">Course Title:</label>
+                <input type="text" id="course-title" placeholder="Enter course title" value="French for Beginners">
+            </div>
+            <div>
+                <label for="course-description">Course Description:</label>
+                <input type="text" id="course-description" placeholder="Enter a short description" value="Learn the basics of French language including vocabulary, grammar, and pronunciation">
+            </div>
+        </div>
+
+        <div class="lessons-container" id="lessons-container">
+            <!-- Lessons will be added here -->
+        </div>
+
+        <div class="main-button-container">
+            <button class="add-lesson-btn" id="main-add-lesson-btn" onclick="addLesson()">
+                <i class="fas fa-plus"></i> Add Lesson
+            </button>
+            <button class="done-btn" id="done-btn" onclick="saveCourse()">Done</button>
+        </div>
+        <p class="error-message" id="main-error-message">Please fill in all fields before adding a new lesson.</p>
+    </div>
+
+    <div class="bottom-text">
+        <p>Done?</p>
+        <a href="./manage.html">Back to Courses</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Language Learning Website. All rights reserved. <a href="../privacy.html">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        let lessonCount = 0;
+        let subLessonCounts = {};
+        let isEditMode = false;
+        let currentLanguage = '';
+
+        // Function to initialize the page
+        function initializePage() {
+            // Check if we're in edit mode
+            const urlParams = new URLSearchParams(window.location.search);
+            isEditMode = urlParams.get('mode') === 'edit';
+            currentLanguage = urlParams.get('language') || '';
+
+            if (isEditMode && currentLanguage) {
+                // Update the title
+                document.querySelector('h1').textContent = `Edit Course: ${currentLanguage}`;
+                
+                // Load existing course content
+                loadCourseContent();
+            }
+        }
+
+        function confirmLogout() {
+            const confirmation = confirm("Are you sure you want to log out?");
+            if (confirmation) {
+                window.location.href = "../index.html";
+            }
+        }
+
+        // Function to load existing course content
+        function loadCourseContent() {
+            fetch('get_course_content.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `language=${encodeURIComponent(currentLanguage)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Set course title and description
+                    document.getElementById('course-title').value = data.title || '';
+                    document.getElementById('course-description').value = data.description || '';
+
+                    // Load lessons
+                    if (data.lessons && data.lessons.length > 0) {
+                        data.lessons.forEach(lesson => {
+                            addLesson();
+                            const lessonId = lessonCount;
+                            
+                            // Set lesson title and content
+                            document.getElementById(`lesson-${lessonId}-title`).value = lesson.title || '';
+                            document.getElementById(`lesson-${lessonId}-content`).value = lesson.content || '';
+
+                            // Load sub-lessons if any
+                            if (lesson.subLessons && lesson.subLessons.length > 0) {
+                                lesson.subLessons.forEach(subLesson => {
+                                    addSubLesson(lessonId);
+                                    const subLessonId = subLessonCounts[lessonId];
+                                    
+                                    // Set sub-lesson title and content
+                                    document.getElementById(`sub-lesson-${lessonId}-${subLessonId}-title`).value = subLesson.title || '';
+                                    document.getElementById(`sub-lesson-${lessonId}-${subLessonId}-content`).value = subLesson.content || '';
+                                });
+                            }
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error loading course content:', error);
+                alert('Error loading course content');
+            });
+        }
+
+        // Function to add a new lesson
+        function addLesson() {
+            // Get the current number of lessons
+            const currentLessons = document.querySelectorAll('.lesson-item').length;
+            lessonCount = currentLessons + 1;
+            
+            const lessonsContainer = document.getElementById('lessons-container');
+            
+            const lessonDiv = document.createElement('div');
+            lessonDiv.className = 'lesson-item';
+            lessonDiv.id = `lesson-${lessonCount}`;
+            
+            lessonDiv.innerHTML = `
+                <div class="lesson-header">
+                    <div class="lesson-number">Lesson ${lessonCount}</div>
+                    <button class="remove-btn" onclick="removeLesson(${lessonCount})">×</button>
+                </div>
+                <div class="lesson-content">
+                    <label for="lesson-${lessonCount}-title">Lesson Title:</label>
+                    <input type="text" id="lesson-${lessonCount}-title" placeholder="Enter lesson title" oninput="validateLessonContent(${lessonCount})">
+                    
+                    <label for="lesson-${lessonCount}-content">Lesson Content:</label>
+                    <textarea id="lesson-${lessonCount}-content" placeholder="Enter the main content for this lesson" oninput="validateLessonContent(${lessonCount})"></textarea>
+                </div>
+                
+                <div class="sub-lessons" id="sub-lessons-${lessonCount}">
+                    <!-- Sub-lessons will be added here -->
+                </div>
+                
+                <div class="button-row">
+                    <button class="add-sub-btn" id="add-sub-btn-${lessonCount}" onclick="addSubLesson(${lessonCount})" disabled>
+                        <i class="fas fa-plus"></i> Add Sub-Section
+                    </button>
+                </div>
+                <p class="error-message" id="error-message-${lessonCount}">Please fill in all fields before adding a sub-section.</p>
+            `;
+            
+            lessonsContainer.appendChild(lessonDiv);
+            
+            // Initialize sub-lesson counter for this lesson
+            subLessonCounts[lessonCount] = 0;
+            
+            // Scroll to the new lesson
+            lessonDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Focus on the lesson title field
+            setTimeout(() => {
+                document.getElementById(`lesson-${lessonCount}-title`).focus();
+            }, 500);
+
+            // Validate main add lesson button
+            validateMainAddButton();
+        }
+        
+        // Function to add a new sub-lesson
+        function addSubLesson(lessonId) {
+            subLessonCounts[lessonId]++;
+            const subLessonCount = subLessonCounts[lessonId];
+            const subLessonsContainer = document.getElementById(`sub-lessons-${lessonId}`);
+            
+            const subLessonDiv = document.createElement('div');
+            subLessonDiv.className = 'sub-lesson-item';
+            subLessonDiv.id = `sub-lesson-${lessonId}-${subLessonCount}`;
+            
+            subLessonDiv.innerHTML = `
+                <div class="sub-lesson-header">
+                    <div class="sub-lesson-title">Sub-Section ${subLessonCount}</div>
+                    <button class="remove-btn" onclick="removeSubLesson(${lessonId}, ${subLessonCount})">×</button>
+                </div>
+                <div class="lesson-content">
+                    <label for="sub-lesson-${lessonId}-${subLessonCount}-title">Title:</label>
+                    <input type="text" id="sub-lesson-${lessonId}-${subLessonCount}-title" placeholder="Enter sub-section title" oninput="validateSubLessonContent(${lessonId})">
+                    
+                    <label for="sub-lesson-${lessonId}-${subLessonCount}-content">Content:</label>
+                    <textarea id="sub-lesson-${lessonId}-${subLessonCount}-content" placeholder="Enter content for this sub-section" oninput="validateSubLessonContent(${lessonId})"></textarea>
+                </div>
+            `;
+            
+            subLessonsContainer.appendChild(subLessonDiv);
+            
+            // Disable the Add Sub-Section button until this sub-section is filled
+            document.getElementById(`add-sub-btn-${lessonId}`).disabled = true;
+            
+            // Scroll to the new sub-lesson
+            subLessonDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Focus on the sub-lesson title field
+            setTimeout(() => {
+                document.getElementById(`sub-lesson-${lessonId}-${subLessonCount}-title`).focus();
+            }, 500);
+        }
+        
+        // Function to remove a lesson
+        function removeLesson(lessonId) {
+            const lessonElement = document.getElementById(`lesson-${lessonId}`);
+            if (lessonElement) {
+                if (confirm('Are you sure you want to remove this lesson and all its sub-sections?')) {
+                    lessonElement.remove();
+                    
+                    // Remove from subLessonCounts object
+                    delete subLessonCounts[lessonId];
+                    
+                    // Update lesson numbering
+                    updateLessonNumbering();
+                    
+                    // Validate main add button
+                    validateMainAddButton();
+                }
+            }
+        }
+        
+        // Function to remove a sub-lesson
+        function removeSubLesson(lessonId, subLessonId) {
+            const subLessonElement = document.getElementById(`sub-lesson-${lessonId}-${subLessonId}`);
+            if (subLessonElement) {
+                if (confirm('Are you sure you want to remove this sub-section?')) {
+                    subLessonElement.remove();
+                    
+                    // Update sub-lesson numbering
+                    updateSubLessonNumbering(lessonId);
+                    
+                    // Validate lesson's add sub-lesson button
+                    validateSubLessonContent(lessonId);
+                }
+            }
+        }
+        
+        // Function to update lesson numbering
+        function updateLessonNumbering() {
+            const lessonItems = document.querySelectorAll('.lesson-item');
+            lessonItems.forEach((item, index) => {
+                const numberElement = item.querySelector('.lesson-number');
+                if (numberElement) {
+                    numberElement.textContent = `Lesson ${index + 1}`;
+                }
+                
+                // Update the lesson ID and related elements
+                const oldId = item.id;
+                const oldLessonId = parseInt(oldId.split('-')[1]);
+                const newLessonId = index + 1;
+                
+                if (oldLessonId !== newLessonId) {
+                    // Update lesson ID
+                    item.id = `lesson-${newLessonId}`;
+                    
+                    // Update lesson content IDs
+                    const titleInput = item.querySelector(`#lesson-${oldLessonId}-title`);
+                    const contentTextarea = item.querySelector(`#lesson-${oldLessonId}-content`);
+                    
+                    if (titleInput) {
+                        titleInput.id = `lesson-${newLessonId}-title`;
+                        titleInput.setAttribute('oninput', `validateLessonContent(${newLessonId})`);
+                    }
+                    
+                    if (contentTextarea) {
+                        contentTextarea.id = `lesson-${newLessonId}-content`;
+                        contentTextarea.setAttribute('oninput', `validateLessonContent(${newLessonId})`);
+                    }
+                    
+                    // Update sub-lessons container ID
+                    const subLessonsContainer = item.querySelector(`#sub-lessons-${oldLessonId}`);
+                    if (subLessonsContainer) {
+                        subLessonsContainer.id = `sub-lessons-${newLessonId}`;
+                    }
+                    
+                    // Update add sub-button
+                    const addSubBtn = item.querySelector(`#add-sub-btn-${oldLessonId}`);
+                    if (addSubBtn) {
+                        addSubBtn.id = `add-sub-btn-${newLessonId}`;
+                        addSubBtn.setAttribute('onclick', `addSubLesson(${newLessonId})`);
+                    }
+                    
+                    // Update error message
+                    const errorMsg = item.querySelector(`#error-message-${oldLessonId}`);
+                    if (errorMsg) {
+                        errorMsg.id = `error-message-${newLessonId}`;
+                    }
+                    
+                    // Update subLessonCounts
+                    if (subLessonCounts[oldLessonId] !== undefined) {
+                        subLessonCounts[newLessonId] = subLessonCounts[oldLessonId];
+                        delete subLessonCounts[oldLessonId];
+                    }
+                    
+                    // Update sub-lesson IDs
+                    const subLessons = item.querySelectorAll('.sub-lesson-item');
+                    subLessons.forEach((subItem) => {
+                        const oldSubId = subItem.id;
+                        const parts = oldSubId.split('-');
+                        const subLessonNum = parts[3];
+                        
+                        // Update sub-lesson ID
+                        subItem.id = `sub-lesson-${newLessonId}-${subLessonNum}`;
+                        
+                        // Update sub-lesson content IDs
+                        const subTitleInput = subItem.querySelector(`#sub-lesson-${oldLessonId}-${subLessonNum}-title`);
+                        const subContentTextarea = subItem.querySelector(`#sub-lesson-${oldLessonId}-${subLessonNum}-content`);
+                        
+                        if (subTitleInput) {
+                            subTitleInput.id = `sub-lesson-${newLessonId}-${subLessonNum}-title`;
+                            subTitleInput.setAttribute('oninput', `validateSubLessonContent(${newLessonId})`);
+                        }
+                        
+                        if (subContentTextarea) {
+                            subContentTextarea.id = `sub-lesson-${newLessonId}-${subLessonNum}-content`;
+                            subContentTextarea.setAttribute('oninput', `validateSubLessonContent(${newLessonId})`);
+                        }
+                        
+                        // Update remove button
+                        const removeBtn = subItem.querySelector('.remove-btn');
+                        if (removeBtn) {
+                            removeBtn.setAttribute('onclick', `removeSubLesson(${newLessonId}, ${subLessonNum})`);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Function to update sub-lesson numbering
+        function updateSubLessonNumbering(lessonId) {
+            const subLessonItems = document.querySelectorAll(`#sub-lessons-${lessonId} .sub-lesson-item`);
+            
+            // Reset counter
+            subLessonCounts[lessonId] = subLessonItems.length;
+            
+            subLessonItems.forEach((item, index) => {
+                const numberElement = item.querySelector('.sub-lesson-title');
+                if (numberElement) {
+                    numberElement.textContent = `Sub-Section ${index + 1}`;
+                }
+                
+                // Update the sub-lesson ID and related elements
+                const oldId = item.id;
+                const oldSubId = parseInt(oldId.split('-')[3]);
+                const newSubId = index + 1;
+                
+                if (oldSubId !== newSubId) {
+                    // Update sub-lesson ID
+                    item.id = `sub-lesson-${lessonId}-${newSubId}`;
+                    
+                    // Update sub-lesson content IDs
+                    const titleInput = item.querySelector(`#sub-lesson-${lessonId}-${oldSubId}-title`);
+                    const contentTextarea = item.querySelector(`#sub-lesson-${lessonId}-${oldSubId}-content`);
+                    
+                    if (titleInput) {
+                        titleInput.id = `sub-lesson-${lessonId}-${newSubId}-title`;
+                    }
+                    
+                    if (contentTextarea) {
+                        contentTextarea.id = `sub-lesson-${lessonId}-${newSubId}-content`;
+                    }
+                    
+                    // Update remove button
+                    const removeBtn = item.querySelector('.remove-btn');
+                    if (removeBtn) {
+                        removeBtn.setAttribute('onclick', `removeSubLesson(${lessonId}, ${newSubId})`);
+                    }
+                }
+            });
+        }
+        
+        // Function to validate lesson content
+        function validateLessonContent(lessonId) {
+            const addSubBtn = document.getElementById(`add-sub-btn-${lessonId}`);
+            const errorMessage = document.getElementById(`error-message-${lessonId}`);
+            
+            const lessonTitle = document.getElementById(`lesson-${lessonId}-title`).value.trim();
+            const lessonContent = document.getElementById(`lesson-${lessonId}-content`).value.trim();
+            
+            const isValid = lessonTitle && lessonContent;
+            
+            addSubBtn.disabled = !isValid;
+            errorMessage.style.display = isValid ? 'none' : 'block';
+            
+            // Also validate the main add lesson button
+            validateMainAddButton();
+        }
+        
+        // Function to validate sub-lesson content
+        function validateSubLessonContent(lessonId) {
+            const addSubBtn = document.getElementById(`add-sub-btn-${lessonId}`);
+            const errorMessage = document.getElementById(`error-message-${lessonId}`);
+            
+            // Check if the main lesson content is valid
+            const lessonTitle = document.getElementById(`lesson-${lessonId}-title`).value.trim();
+            const lessonContent = document.getElementById(`lesson-${lessonId}-content`).value.trim();
+            
+            if (!lessonTitle || !lessonContent) {
+                addSubBtn.disabled = true;
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check if all sub-lessons are valid
+            let allSubLessonsValid = true;
+            const count = subLessonCounts[lessonId] || 0;
+            
+            for (let i = 1; i <= count; i++) {
+                const subTitleElement = document.getElementById(`sub-lesson-${lessonId}-${i}-title`);
+                const subContentElement = document.getElementById(`sub-lesson-${lessonId}-${i}-content`);
+                
+                // Skip if elements don't exist (might have been removed)
+                if (!subTitleElement || !subContentElement) continue;
+                
+                const subTitle = subTitleElement.value.trim();
+                const subContent = subContentElement.value.trim();
+                
+                if (!subTitle || !subContent) {
+                    allSubLessonsValid = false;
+                    break;
+                }
+            }
+            
+            addSubBtn.disabled = !allSubLessonsValid;
+            errorMessage.style.display = allSubLessonsValid ? 'none' : 'block';
+            
+            // Also validate the main add lesson button
+            validateMainAddButton();
+        }
+        
+        // Function to validate the main add lesson button
+        function validateMainAddButton() {
+            const addLessonBtn = document.getElementById('main-add-lesson-btn');
+            const errorMessage = document.getElementById('main-error-message');
+            
+            // If there are no lessons, enable the button
+            const lessons = document.querySelectorAll('.lesson-item');
+            if (lessons.length === 0) {
+                addLessonBtn.disabled = false;
+                errorMessage.style.display = 'none';
+                return;
+            }
+            
+            // Check if all lessons and their sub-lessons are valid
+            let allValid = true;
+            
+            lessons.forEach(lesson => {
+                const lessonId = parseInt(lesson.id.split('-')[1]);
+                
+                // Check lesson content
+                const lessonTitle = document.getElementById(`lesson-${lessonId}-title`).value.trim();
+                const lessonContent = document.getElementById(`lesson-${lessonId}-content`).value.trim();
+                
+                if (!lessonTitle || !lessonContent) {
+                    allValid = false;
+                    return;
+                }
+                
+                // Check sub-lessons
+                const count = subLessonCounts[lessonId] || 0;
+                for (let i = 1; i <= count; i++) {
+                    const subTitleElement = document.getElementById(`sub-lesson-${lessonId}-${i}-title`);
+                    const subContentElement = document.getElementById(`sub-lesson-${lessonId}-${i}-content`);
+                    
+                    // Skip if elements don't exist (might have been removed)
+                    if (!subTitleElement || !subContentElement) continue;
+                    
+                    const subTitle = subTitleElement.value.trim();
+                    const subContent = subContentElement.value.trim();
+                    
+                    if (!subTitle || !subContent) {
+                        allValid = false;
+                        break;
+                    }
+                }
+            });
+
+            addLessonBtn.disabled = !allValid;
+            errorMessage.style.display = allValid ? 'none' : 'block';
+        }
+        
+        // Function to save the course
+        function saveCourse() {
+            const courseTitle = document.getElementById('course-title').value.trim();
+            const courseDescription = document.getElementById('course-description').value.trim();
+            
+            // Check if course title and description are filled
+            if (!courseTitle || !courseDescription) {
+                alert('Please fill in the course title and description.');
+                return;
+            }
+            
+            // Check if there are any lessons
+            const lessonItems = document.querySelectorAll('.lesson-item');
+            if (lessonItems.length === 0) {
+                alert('Please add at least one lesson to the course.');
+                return;
+            }
+            
+            // Collect all lesson data
+            const lessonsData = [];
+            lessonItems.forEach((item, index) => {
+                const lessonId = parseInt(item.id.split('-')[1]);
+                const lessonTitle = document.getElementById(`lesson-${lessonId}-title`).value.trim();
+                const lessonContent = document.getElementById(`lesson-${lessonId}-content`).value.trim();
+                
+                // Collect sub-lesson data
+                const subLessonsData = [];
+                const subLessonItems = item.querySelectorAll('.sub-lesson-item');
+                subLessonItems.forEach((subItem, subIndex) => {
+                    const subLessonId = parseInt(subItem.id.split('-')[3]);
+                    const subLessonTitle = document.getElementById(`sub-lesson-${lessonId}-${subLessonId}-title`).value.trim();
+                    const subLessonContent = document.getElementById(`sub-lesson-${lessonId}-${subLessonId}-content`).value.trim();
+                    
+                    subLessonsData.push({
+                        title: subLessonTitle,
+                        content: subLessonContent
+                    });
+                });
+                
+                lessonsData.push({
+                    title: lessonTitle,
+                    content: lessonContent,
+                    subLessons: subLessonsData
+                });
+            });
+            
+            // Prepare data for saving
+            const saveData = {
+                language: isEditMode ? currentLanguage : courseTitle.split(' ')[0].toLowerCase(),
+                title: courseTitle,
+                description: courseDescription,
+                lessons: lessonsData
+            };
+            
+            // Save to database
+            fetch('save_course.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(saveData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Course saved successfully!');
+                    window.location.href = 'manage.html';
+                } else {
+                    alert('Error saving course: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving course:', error);
+                alert('Error saving course');
+            });
+        }
+
+        // Initialize the page when it loads
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        function fetchUsername() {
+            fetch('get_teacher_username.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('displayUsername').textContent = data.username;
+                    } else {
+                        document.getElementById('displayUsername').textContent = 'Not logged in';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching username:', error);
+                    document.getElementById('displayUsername').textContent = 'Error loading username';
+                });
+        }
+
+        // Call fetchUsername when the page loads
+        document.addEventListener('DOMContentLoaded', fetchUsername);
+
+        // Toggle profile dropdown menu
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            const button = document.querySelector('.profile-btn');
+            
+            // Close other dropdowns if any
+            document.querySelectorAll('.profile-menu').forEach(m => {
+                if (m !== menu) {
+                    m.style.display = 'none';
+                }
+            });
+            
+            // Toggle current menu
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+            
+            // Prevent event from bubbling up
+            event.stopPropagation();
+        }
+
+        // Hide dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const button = document.querySelector('.profile-btn');
+            
+            // Check if click is outside both menu and button
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Prevent menu from closing when clicking inside it
+        document.getElementById('profileMenu').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        // Logout functionality
+        function logout(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = "../index.html";
+            }
+        }
+    </script>
+</body>
+</html>

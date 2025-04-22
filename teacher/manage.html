@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Courses</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(to right, #1a1a2e, #0f3460), 
+                        url('https://via.placeholder.com/1500x1000/1a1a2e/ffffff?text=Language+Learning+App') no-repeat center center/cover;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        header {
+            width: 100%;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            margin-top: -15px;
+        }
+
+        nav::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .content {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            margin: 20px auto;
+            flex: 1;
+            padding-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            align-content: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .course-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            font-size: 20px;
+        }
+
+        .course-container h3 {
+            margin: 0 0 20px 0;
+            font-size: 1.7rem;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .buttons .btn {
+            padding: 10px 20px;
+            background-color: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 80%;
+            text-align: center;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .buttons .btn:hover {
+            background-color: #f56c85;
+            transform: scale(1.05);
+        }
+
+        .unenroll-btn {
+            background-color: #ff4e42;
+        }
+
+        .unenroll-btn:hover {
+            background-color: #f56c85;
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            padding: 20px 0;
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .add-course-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .add-course-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .profile-container {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .profile-btn {
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: -4px;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: left;
+            z-index: 1002;
+        }
+
+        .profile-menu p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-menu a {
+            color: #e94560;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+
+        /* Popup styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #333;
+            font-size: 1.1rem;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="#" onclick="confirmLogout()">Home</a>
+        <a id="logoutLink" href="../index.html" style="display: none;"></a>
+        <a href="./teacher dashboard.html">Dashboard</a>
+        <a href="./manage.html">Manage Courses</a>
+    </nav>
+    <div class="profile-container">
+        <div class="profile-btn" onclick="toggleProfileMenu()">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-menu" id="profileMenu">
+            <p>username: <span id="displayUsername">teacher123</span></p>
+            <a href="#" onclick="logout(event)">Logout</a>
+        </div>
+    </div>
+</header>
+
+<section class="content">
+    <h2>Manage Your Courses</h2>
+    <div class="dashboard-grid course-list">
+        <!-- Dynamically loaded course containers will appear here -->
+    </div>
+    <a href="./test_add_course_t.php" class="add-course-btn">Add New Course</a>
+</section>
+
+<footer>
+    <p>&copy; 2025 Language Learning Website. All rights reserved. <a href="../privacy.html">Privacy Policy</a></p>
+</footer>
+
+<script>
+    window.onload = function () {
+        // Fetch courses from PHP backend
+        fetch('get_courses_t.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const coursesContainer = document.querySelector('.course-list');
+                    coursesContainer.innerHTML = ''; // Clear existing courses
+
+                    data.courses.forEach(course => {
+                        const courseDiv = document.createElement('div');
+                        courseDiv.classList.add('course-container');
+
+                        // Use original name for display and deletion
+                        // Use normalized name only for edit link file
+                        const normalizedCourse = course.toLowerCase().replace(/\s+/g, '_');
+                        
+                        // Check if it's one of the predefined languages
+                        const predefinedLanguages = ['french', 'german', 'spanish'];
+                        const isPredefined = predefinedLanguages.includes(normalizedCourse);
+                        
+                        // Set the edit link based on whether it's a predefined language
+                        const editLink = isPredefined ? 
+                            `./edit ${normalizedCourse}.html` : 
+                            `./create course.html?language=${encodeURIComponent(course)}&mode=edit`;
+
+                        courseDiv.innerHTML = `
+                            <h3>${course}</h3>
+                            <div class="buttons">
+                                <a class="btn" href="${editLink}">Edit Course</a>
+                                <a class="btn" href="./create quiz.html?language=${encodeURIComponent(course)}">Create Quiz</a>
+                                <a class="btn unenroll-btn" href="#" onclick="deleteCourse('${course}')">Delete Course</a>
+                            </div>
+                        `;
+                        coursesContainer.appendChild(courseDiv);
+                    });
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching courses');
+            });
+    }
+
+    function deleteCourse(courseName) {
+        if (confirm(`Are you sure you want to delete the course: ${courseName}?`)) {
+            fetch('unenroll_course_t.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `language=${encodeURIComponent(courseName)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the course from display
+                    const courseDivs = document.querySelectorAll('.course-container');
+                    courseDivs.forEach(div => {
+                        if (div.querySelector('h3').textContent === courseName) {
+                            div.remove();
+                        }
+                    });
+                    // Show centered popup
+                    const popup = document.createElement('div');
+                    popup.className = 'popup-overlay';
+                    popup.innerHTML = `
+                        <div class="popup">
+                            Course "${courseName}" deleted successfully
+                        </div>
+                    `;
+                    document.body.appendChild(popup);
+                    setTimeout(() => {
+                        popup.remove();
+                    }, 2000);
+                } else {
+                    alert(data.message || 'Failed to delete course');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the course');
+            });
+        }
+    }
+
+    function confirmLogout() {
+        const confirmAction = confirm("Are you sure you want to log out?");
+        if (confirmAction) {
+            document.getElementById("logoutLink").click();
+        }
+    }
+
+    // Profile dropdown functionality - new addition
+    function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+    
+        // Hide dropdown if clicked outside - new addition
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const button = document.querySelector('.profile-btn');
+            if (menu && button && !menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    
+        // Fetch and display username
+        function fetchUsername() {
+            fetch('get_teacher_username.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('displayUsername').textContent = data.username;
+                    } else {
+                        document.getElementById('displayUsername').textContent = 'Not logged in';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching username:', error);
+                    document.getElementById('displayUsername').textContent = 'Error loading username';
+                });
+        }
+
+        // Call fetchUsername when the page loads
+        document.addEventListener('DOMContentLoaded', fetchUsername);
+
+        // Toggle profile dropdown menu
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+    
+        // Hide dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const button = document.querySelector('.profile-btn');
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    
+        // Logout functionality
+        function logout(event) {
+            event.preventDefault();
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = "../index.html";
+            }
+        }
+
+        function confirmLogout() {
+        const confirmation = confirm("Are you sure you want to log out?");
+        if (confirmation) {
+            window.location.href = "../index.html";
+        }
+    }
+</script>
+
+
+
+
+</body>
+</html>

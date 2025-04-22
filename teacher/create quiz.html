@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN for the user icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            z-index: 1000;
+            margin-top: -3px;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        nav::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        header {
+            margin-top: 80px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            color: #e94560;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-container {
+            margin: 20px auto;
+            width: 800px;
+            min-height: 250px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-details {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .quiz-details label {
+            color: #00d9ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .quiz-details input {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+        }
+
+        .questions-container {
+            width: 100%;
+        }
+
+        .question-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #e94560;
+            margin-bottom: 15px;
+        }
+
+        .question-content label {
+            color: #00d9ff;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .question-content input[type="text"], .question-content textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .question-content textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .correct-answer {
+            margin-top: 15px;
+        }
+
+        .correct-answer select {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1rem;
+        }
+
+        .remove-question {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #e94560;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .remove-question:hover {
+            background-color: #d83755;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .add-question-btn, .done-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #e94560;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Raleway', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .add-question-btn:hover, .done-btn:hover {
+            background-color: #d83755;
+            transform: scale(1.05);
+        }
+
+        .add-question-btn:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .bottom-text {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.1rem;
+        }
+
+        .bottom-text p {
+            color: #fff;
+            margin: 0;
+            display: inline;
+        }
+
+        .bottom-text a {
+            color: #00d9ff;
+            text-decoration: none;
+            margin-left: 8px;
+            transition: color 0.3s;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile dropdown styles */
+        .profile-container {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .profile-btn {
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: left;
+            z-index: 1002;
+        }
+
+        .profile-menu p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-menu a {
+            color: #e94560;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="confirmLogout()">Home</a>
+            <a id="logoutLink" href="../index.html" style="display: none;"></a>
+            <a href="./teacher dashboard.html">Dashboard</a>
+            <a href="./manage.html">Manage Courses</a>
+        </nav>
+        
+        <!-- Profile Dropdown -->
+        <div class="profile-container">
+            <div class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+                <p>username: <span id="displayUsername">teacher123</span></p>
+                <a href="#" onclick="logout(event)">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <h1>Create Quiz</h1>
+
+    <div class="quiz-container">
+        <div class="quiz-details">
+            <div>
+                <label for="language">Language:</label>
+                <input type="text" id="language" name="language" readonly>
+            </div>
+            <div>
+                <label for="quiz-title">Quiz Title:</label>
+                <input type="text" id="quiz-title" placeholder="Enter quiz title">
+            </div>
+            <div>
+                <label for="quiz-description">Description:</label>
+                <input type="text" id="quiz-description" placeholder="Enter a short description">
+            </div>
+        </div>
+
+        <div class="questions-container" id="questions-container">
+            <!-- Questions will be added here -->
+        </div>
+
+        <div class="button-container">
+            <button class="add-question-btn" id="add-question-btn" disabled>Add Question</button>
+            <button class="done-btn" id="done-btn">Done</button>
+        </div>
+        <p class="error-message" id="error-message">Please fill in all fields before adding a new question.</p>
+    </div>
+
+    <div class="bottom-text">
+        <p>Done?</p>
+        <a href="./manage.html">Back to Courses</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Language Learning Website. All rights reserved. <a href="../privacy.html">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        let questionCount = 0;
+
+        // Function to add a new question
+        function addQuestion() {
+            questionCount++;
+            const questionContainer = document.getElementById('questions-container');
+            
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-item';
+            questionDiv.id = `question-${questionCount}`;
+            
+            questionDiv.innerHTML = `
+                <div class="question-number">Question ${questionCount}</div>
+                <button class="remove-question" onclick="removeQuestion(${questionCount})">×</button>
+                <div class="question-content">
+                    <label for="q${questionCount}-text">Question:</label>
+                    <textarea id="q${questionCount}-text" placeholder="Enter your question here" oninput="validateQuestions()"></textarea>
+                    
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <label for="q${questionCount}-option1">Option A:</label>
+                            <input type="text" id="q${questionCount}-option1" placeholder="Option A" oninput="validateQuestions()">
+                        </div>
+                        <div class="option-item">
+                            <label for="q${questionCount}-option2">Option B:</label>
+                            <input type="text" id="q${questionCount}-option2" placeholder="Option B" oninput="validateQuestions()">
+                        </div>
+                        <div class="option-item">
+                            <label for="q${questionCount}-option3">Option C:</label>
+                            <input type="text" id="q${questionCount}-option3" placeholder="Option C" oninput="validateQuestions()">
+                        </div>
+                        <div class="option-item">
+                            <label for="q${questionCount}-option4">Option D:</label>
+                            <input type="text" id="q${questionCount}-option4" placeholder="Option D" oninput="validateQuestions()">
+                        </div>
+                    </div>
+                    
+                    <div class="correct-answer">
+                        <label for="q${questionCount}-correct">Correct Answer:</label>
+                        <select id="q${questionCount}-correct" onchange="validateQuestions()">
+                            <option value="">-- Select correct answer --</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            
+            questionContainer.appendChild(questionDiv);
+            
+            // Disable the Add Question button until this question is filled
+            document.getElementById('add-question-btn').disabled = true;
+            
+            // Scroll to the new question
+            questionDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Focus on the question text field
+            setTimeout(() => {
+                document.getElementById(`q${questionCount}-text`).focus();
+            }, 500);
+        }
+        
+        // Function to remove a question
+        function removeQuestion(questionId) {
+            const questionElement = document.getElementById(`question-${questionId}`);
+            if (questionElement) {
+                questionElement.remove();
+                
+                // Update question numbering
+                const questionItems = document.querySelectorAll('.question-item');
+                questionItems.forEach((item, index) => {
+                    const numberElement = item.querySelector('.question-number');
+                    if (numberElement) {
+                        numberElement.textContent = `Question ${index + 1}`;
+                    }
+                });
+                
+                // Validate questions after removal
+                validateQuestions();
+            }
+        }
+
+        function confirmLogout() {
+            const confirmation = confirm("Are you sure you want to log out?");
+            if (confirmation) {
+                window.location.href = "../index.html";
+            }
+        }
+        
+        // Function to validate all questions
+        function validateQuestions() {
+            const addButton = document.getElementById('add-question-btn');
+            const errorMessage = document.getElementById('error-message');
+            let isValid = true;
+            
+            // Check all question items
+            const questionItems = document.querySelectorAll('.question-item');
+            
+            if (questionItems.length === 0) {
+                // If there are no questions, enable the add button
+                addButton.disabled = false;
+                errorMessage.style.display = 'none';
+                return;
+            }
+            
+            // Get the last question item to check if it's complete
+            const lastQuestion = questionItems[questionItems.length - 1];
+            const lastQuestionId = lastQuestion.id.split('-')[1];
+            
+            // Check if all fields in the last question are filled
+            const questionText = document.getElementById(`q${lastQuestionId}-text`).value.trim();
+            const option1 = document.getElementById(`q${lastQuestionId}-option1`).value.trim();
+            const option2 = document.getElementById(`q${lastQuestionId}-option2`).value.trim();
+            const option3 = document.getElementById(`q${lastQuestionId}-option3`).value.trim();
+            const option4 = document.getElementById(`q${lastQuestionId}-option4`).value.trim();
+            const correctAnswer = document.getElementById(`q${lastQuestionId}-correct`).value;
+            
+            if (!questionText || !option1 || !option2 || !option3 || !option4 || !correctAnswer) {
+                isValid = false;
+            }
+            
+            // Enable or disable the add button based on validation
+            addButton.disabled = !isValid;
+            errorMessage.style.display = isValid ? 'none' : 'block';
+        }
+        
+        // Function to save the quiz
+        function saveQuiz() {
+            const quizTitle = document.getElementById('quiz-title').value;
+            const quizDescription = document.getElementById('quiz-description').value;
+            const language = document.getElementById('language').value;
+            
+            // Check if quiz title and description are filled
+            if (!quizTitle.trim() || !quizDescription.trim()) {
+                alert('Please fill in the quiz title and description.');
+                return;
+            }
+            
+            // Check if there are any questions
+            const questionItems = document.querySelectorAll('.question-item');
+            if (questionItems.length === 0) {
+                alert('Please add at least one question to the quiz.');
+                return;
+            }
+            
+            // Validate all questions
+            let allValid = true;
+            questionItems.forEach((item, index) => {
+                const questionId = item.id.split('-')[1];
+                const questionText = document.getElementById(`q${questionId}-text`).value.trim();
+                const option1 = document.getElementById(`q${questionId}-option1`).value.trim();
+                const option2 = document.getElementById(`q${questionId}-option2`).value.trim();
+                const option3 = document.getElementById(`q${questionId}-option3`).value.trim();
+                const option4 = document.getElementById(`q${questionId}-option4`).value.trim();
+                const correctAnswer = document.getElementById(`q${questionId}-correct`).value;
+                
+                if (!questionText || !option1 || !option2 || !option3 || !option4 || !correctAnswer) {
+                    allValid = false;
+                    alert(`Question ${index + 1} is incomplete. Please fill in all fields.`);
+                    return;
+                }
+            });
+            
+            if (!allValid) {
+                return;
+            }
+            
+            // Gather all questions and options
+            const questions = [];
+            
+            questionItems.forEach((item, index) => {
+                const questionId = item.id.split('-')[1];
+                const questionText = document.getElementById(`q${questionId}-text`).value;
+                const option1 = document.getElementById(`q${questionId}-option1`).value;
+                const option2 = document.getElementById(`q${questionId}-option2`).value;
+                const option3 = document.getElementById(`q${questionId}-option3`).value;
+                const option4 = document.getElementById(`q${questionId}-option4`).value;
+                const correctAnswer = document.getElementById(`q${questionId}-correct`).value;
+                
+                questions.push({
+                    text: questionText,
+                    options: {
+                        A: option1,
+                        B: option2,
+                        C: option3,
+                        D: option4
+                    },
+                    correct: correctAnswer
+                });
+            });
+            
+            const quizData = {
+                title: quizTitle,
+                description: quizDescription,
+                language: language,
+                questions: questions
+            };
+            
+            // Save quiz data to server
+            fetch('save_quiz.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(quizData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Quiz saved successfully!');
+                    window.location.href = './manage.html';
+                } else {
+                    alert('Error saving quiz: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving quiz. Please try again.');
+            });
+        }
+        
+        // Function to load existing quiz
+        function loadExistingQuiz() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const language = urlParams.get('language');
+            
+            if (language) {
+                // Set the language field
+                document.getElementById('language').value = language;
+                
+                fetch(`get_quiz_questions.php?language=${encodeURIComponent(language)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.quiz) {
+                            // Fill in quiz details
+                            document.getElementById('quiz-title').value = data.quiz.title;
+                            document.getElementById('quiz-description').value = data.quiz.description;
+                            
+                            // Clear existing questions
+                            const questionsContainer = document.getElementById('questions-container');
+                            questionsContainer.innerHTML = '';
+                            questionCount = 0;
+                            
+                            // Add each question
+                            data.quiz.questions.forEach(question => {
+                                addQuestion();
+                                const lastQuestionId = questionCount;
+                                
+                                // Fill in question details
+                                document.getElementById(`q${lastQuestionId}-text`).value = question.text;
+                                document.getElementById(`q${lastQuestionId}-option1`).value = question.options.A;
+                                document.getElementById(`q${lastQuestionId}-option2`).value = question.options.B;
+                                document.getElementById(`q${lastQuestionId}-option3`).value = question.options.C;
+                                document.getElementById(`q${lastQuestionId}-option4`).value = question.options.D;
+                                document.getElementById(`q${lastQuestionId}-correct`).value = question.correct;
+                            });
+                            
+                            // Enable add question button
+                            document.getElementById('add-question-btn').disabled = false;
+                        } else {
+                            // If no quiz exists, add a default question
+                            addQuestion();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading quiz:', error);
+                        // If there's an error, add a default question
+                        addQuestion();
+                    });
+            } else {
+                // If no language parameter, add a default question
+                addQuestion();
+            }
+        }
+
+        // Add event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load existing quiz if any
+            loadExistingQuiz();
+            
+            // Add event listener for add question button
+            document.getElementById('add-question-btn').addEventListener('click', addQuestion);
+            
+            // Add event listener for done button
+            document.getElementById('done-btn').addEventListener('click', saveQuiz);
+            
+            // Fetch username
+            fetchUsername();
+
+            // Get language from URL parameter and set it in the select
+            const urlParams = new URLSearchParams(window.location.search);
+            const language = urlParams.get('language');
+            if (language) {
+                document.getElementById('language').value = language;
+                // Disable the language select if it's pre-filled
+                document.getElementById('language').disabled = true;
+            }
+        });
+        
+        // Fetch and display username
+        function fetchUsername() {
+            fetch('get_teacher_username.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('displayUsername').textContent = data.username;
+                    } else {
+                        document.getElementById('displayUsername').textContent = 'Not logged in';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching username:', error);
+                    document.getElementById('displayUsername').textContent = 'Error loading username';
+                });
+        }
+
+        // Toggle profile dropdown menu
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+    
+        // Hide dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('profileMenu');
+            const button = document.querySelector('.profile-btn');
+            if (menu && button && !menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    
+        // Logout functionality
+        function logout(event) {
+            event.preventDefault();
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = "../index.html";
+            }
+        }
+    </script>
+</body>
+</html>

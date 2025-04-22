@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 70px; /* Add padding to prevent content overlap with navbar */
+            margin-bottom: 0; /* Remove extra margin below the footer */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            z-index: 1000;
+            margin-top: -3px;
+            background: linear-gradient(to right, #1a1a2e, #0f3460);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, transform 0.3s;
+        }
+        nav::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        h1 {
+            color: #e94560;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #ddd;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .lessons-container {
+            width: 50%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 300px; /* Initial fixed height */
+            overflow-y: hidden; /* Initially hide scrollbar */
+            transition: max-height 0.3s ease-in-out, overflow-y 0.3s ease-in-out;
+        }
+
+        .lessons-container.expanded {
+            overflow-y: auto; /* Show scrollbar when expanded */
+            max-height: 90vh; /* Increase height when expanded */
+        }
+
+        .lesson {
+            margin-bottom: 20px;
+        }
+
+        .lesson button {
+            width: 100%;
+            background-color: #ada9a9;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: left;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .lesson button::after {
+            content: '>';
+            position: absolute;
+            right: 20px;
+            font-size: 1rem;
+            transform: rotate(90deg);
+            transition: transform 0.3s;
+        }
+
+        .lesson button.active::after {
+            transform: rotate(-90deg);
+        }
+
+        .lesson button:hover {
+            background-color: #534f4f;
+            color: rgb(255, 255, 255);
+            transform: scale(1.02);
+        }
+
+        .lesson-content {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .lesson-content h3 {
+            text-decoration: underline;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .lesson-content ul {
+            list-style-type: disc;
+            margin: 10px 0 0 20px;
+        }
+
+       
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #ff4d6d;
+            transform: scale(1.05);
+        }
+
+        .btn-blue {
+            background-color: #007BFF;
+        }
+
+        .btn-green {
+            background-color: #28a745;
+        }
+
+        .btn-blue:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-green:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 0; /* Remove extra space below footer */
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .profile-container {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            text-align: right;
+            z-index: 1001;
+        }
+
+        .profile-btn {
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: -4px;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: left;
+            z-index: 1002;
+        }
+
+        .profile-menu p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-menu a {
+            color: #e94560;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="confirmLogout()">Home</a>
+            <a id="logoutLink" href="../index.html" style="display: none;"></a>
+            <a href="./student dashboard.html">Dashboard</a>
+            <a href="./courses.html">Manage Courses</a>
+            <a href="./quiz.html">Quizzes</a>
+            <a href="grade.php">Grades</a>
+        </nav>
+        <div class="profile-container">
+            <div class="profile-btn" onclick="toggleProfileMenu()">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+                <p>username: <span id="displayUsername">Loading...</span></p>
+                <a href="#" onclick="logout(event)">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <h1>German for Beginners</h1>
+    <p>Start your journey of learning German with the basics of the language, from pronunciation to vocabulary and grammar essentials.</p>
+
+    <div class="lessons-container">
+        <div class="lesson">
+            <button onclick="toggleLessonContent('lesson1', this)">Lesson 1: Getting Started with German</button>
+            <div id="lesson1" class="lesson-content">
+                <h3>Alphabet & Pronunciation</h3>
+                    <div>
+                        <div>Special characters: ä, ö, ü, ß</div>
+                        <div>Letters different from English: w (v), v (f), j (y)</div>
+                        <div>Common sounds: ch, sch, ei, ie</div>
+                    </div>
+                </p>
+                <h3>Essential Phrases</h3>
+                <div>
+                    <div>Hallo = Hello</div>
+                    <div>Tschüss = Bye</div>
+                    <div>Bitte = Please</div>
+                    <div>Danke = Thank you</div>
+                    <div>Guten Morgen = Good morning</div>
+                    <div>Guten Tag = Good day</div>
+                    <div>Guten Abend = Good evening</div>
+                    <div>Wie geht's? = How are you?</div>
+                    <div>Sehr gut = Very good</div>
+                    <div>Sprechen Sie langsam = Speak slowly</div>
+                </div>
+                <h3>Numbers 0-10</h3>
+                <div>
+                    <div>0 = Null</div>
+                    <div>1 = Eins</div>
+                    <div>2 = Zwei</div>
+                    <div>3 = Drei</div>
+                    <div>4 = Vier</div>
+                    <div>5 = Fünf</div>
+                    <div>6 = Sechs</div>
+                    <div>7 = Sieben</div>
+                    <div>8 = Acht</div>
+                    <div>9 = Neun</div>
+                    <div>10 = Zehn</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson">
+            <button onclick="toggleLessonContent('lesson2', this)">Lesson 2: Basic Grammar</button>
+            <div id="lesson2" class="lesson-content">
+                <h3>Personal Pronouns</h3>
+                    <div>
+                        <div>ich = I</div>
+                        <div>du = you (informal)</div>
+                        <div>er/sie/es = he/she/it</div>
+                        <div>wir = we</div>
+                        <div>ihr = you (plural informal)</div>
+                        <div>Sie = you (formal)</div>
+                        <div>sie = they</div>
+                    </div>
+                <h3>Basic Verbs (Present Tense)</h3>
+                    <h4>sein = to be</h4>
+                    <div>
+                        <div>ich bin = I am</div>
+                        <div>du bist = you are</div>
+                        <div>er/sie/es ist = he/she/it is</div>
+                    </div>
+                    <h4>haben = to have</h4>
+                    <div>
+                        <div>ich habe = I have</div>
+                        <div>du hast = you have</div>
+                        <div>er/sie/es hat = he/she/it has</div>
+                    </div>
+                
+                <h3>Essential Vocabulary</h3>
+                    <h4>Days:</h4>
+                    <div>
+                        <div>Montag = Monday</div>
+                        <div>Dienstag = Tuesday</div>
+                        <div>Mittwoch = Wednesday</div>
+                        <div>Donnerstag = Thursday</div>
+                        <div>Freitag = Friday</div>
+                        <div>Samstag = Saturday</div>
+                        <div>Sonntag = Sunday</div>
+                    </div>
+
+                    <h4>Colors:</h4>
+                    <div>
+                        <div>rot = red</div>
+                        <div>blau = blue</div>
+                        <div>grün = green</div>
+                        <div>gelb = yellow</div>
+                        <div>schwarz = black</div>
+                        <div>weiß = white</div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="lesson">
+            <button onclick="toggleLessonContent('lesson3', this)">Lesson 3: German Structure</button>
+            <div id="lesson3" class="lesson-content">
+                <h3>Articles</h3>
+                    <h4>Definite(the):</h4>
+                    <div>
+                        <div>der = the (masculine)</div>
+                        <div>die = the (feminine)</div>
+                        <div>das = the (neuter)</div>
+                        <div>die = the (plural)</div>                        
+                    </div>
+                
+                    <h4>Indefinite:</h4>
+                        <div>
+                            <div>ein = a/an (masculine)</div>
+                            <div>eine = a/an (feminine)</div>
+                            <div>ein = a/an (neuter)</div>
+                        </div>
+                
+                <h3>Question Words</h3>
+                <div>
+                    <div>Was? = What?</div>
+                    <div>Wer? = Who?</div>
+                    <div>Wo? = Where?</div>
+                    <div>Wann? = When?</div>
+                    <div>Warum? = Why?</div>
+                    <div>Wie? = How?</div>
+                </div>
+
+                <h3>Basic Adjectives</h3>
+                <div>
+                    <div>groß = big/tall</div>
+                    <div>klein = small</div>
+                    <div>neu = new</div>
+                    <div>alt = old</div>
+                    <div>schön = beautiful</div>
+                    <div>gut = good</div>
+                    <div>schlecht = bad</div>
+                </div>                
+            </div>
+        </div>
+
+        <div class="lesson">
+            <button onclick="toggleLessonContent('lesson4', this)">Lesson 4: Practical German </button>
+            <div id="lesson4" class="lesson-content">
+                <h3>Restaurant Phrases</h3>
+                <div>
+                    <div>Die Rechnung, bitte = The bill, please</div>
+                    <div>Ich möchte... = I would like...</div>
+                    <div>Haben Sie...? = Do you have...?</div>
+                    <div>Zum Wohl! = Cheers!</div>
+                    <div>Die Speisekarte, bitte = The menu, please</div>
+                </div>
+
+                <h3>Shopping Vocabulary</h3>
+                <div>
+                    <div>Was kostet das? = How much is that?</div>
+                    <div>Das ist zu teuer = That's too expensive</div>
+                    <div>die Größe = the size</div>
+                    <div>der Preis = the price</div>
+                    <div>die Anprobe = fitting room</div>
+                </div>
+
+                <h3>Emergency Phrases</h3>
+                <div>
+                    <div>Hilfe! = Help!</div>
+                    <div>Ich brauche einen Arzt = I need a doctor</div>
+                    <div>Wo ist das Krankenhaus? = Where is the hospital?</div>
+                    <div>Rufen Sie die Polizei! = Call the police!</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="button-container">
+        <a class="btn btn-blue" href="./courses.html">Go Back</a>
+        <a class="btn btn-green" href="./spanish quiz.html">Take Quiz</a>
+        <a class="btn" href="download_german_pdf.php" target="_blank">Download PDF</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Language Learning Website. All rights reserved. <a href="../privacy.html">Privacy Policy</a></p>
+    </footer>
+</body>
+<script>
+    function toggleLessonContent(id, button) {
+        const content = document.getElementById(id);
+        const allContent = document.querySelectorAll('.lesson-content');
+        const allButtons = document.querySelectorAll('.lesson button');
+        const container = document.querySelector('.lessons-container');
+
+        // Close all other lessons
+        allContent.forEach(item => {
+            if (item !== content) {
+                item.style.display = "none";
+            }
+        });
+
+        allButtons.forEach(item => {
+            if (item !== button) {
+                item.classList.remove('active');
+            }
+        });
+
+        // Toggle the current lesson
+        const isVisible = content.style.display === "block";
+        content.style.display = isVisible ? "none" : "block";
+        button.classList.toggle('active', !isVisible);
+
+        // Adjust container scroll behavior when content is visible
+        const hasVisibleContent = [...allContent].some(item => item.style.display === "block");
+        if (hasVisibleContent) {
+            container.classList.add('expanded');  // Show scrollbar
+        } else {
+            container.classList.remove('expanded');  // Hide scrollbar
+        }
+    }
+
+    function confirmLogout() {
+        const confirmation = confirm("Are you sure you want to log out?");
+        if (confirmation) {
+            window.location.href = "../index.html";
+        }
+    }
+
+    function fetchUsername() {
+        fetch('get_username.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('displayUsername').textContent = data.username;
+                } else {
+                    document.getElementById('displayUsername').textContent = 'Not logged in';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching username:', error);
+                document.getElementById('displayUsername').textContent = 'Error loading username';
+            });
+    }
+    // Call fetchUsername when the page loads
+    document.addEventListener('DOMContentLoaded', fetchUsername);
+
+    // Toggle profile dropdown menu
+    function toggleProfileMenu() {
+        const menu = document.getElementById('profileMenu');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('profileMenu');
+        const button = document.querySelector('.profile-btn');
+        if (!menu.contains(event.target) && !button.contains(event.target)) {
+            menu.style.display = 'none';
+        }
+    });
+
+    function logout(event) {
+        event.preventDefault();
+        const confirmLogout = confirm("Are you sure you want to log out?");
+        if (confirmLogout) {
+            window.location.href = "../index.html";
+        }
+    }
+
+    function confirmLogout() {
+            const confirmAction = confirm("Are you sure you want to log out?");
+            if (confirmAction) {
+                document.getElementById("logoutLink").click();
+            }
+        }
+</script>
+</html>
